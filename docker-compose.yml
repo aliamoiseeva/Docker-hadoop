@@ -1,0 +1,38 @@
+# docker-compose
+
+version: "3"
+
+networks:
+  hadoop:
+    driver: bridge
+
+services:
+  namenode:
+    image: 'aliavm/namenode:1.1'
+    entrypoint: bash /root/run1.sh
+    command: /bin/bash
+    hostname: hadoop-namenode
+    ports:
+      - 9870:9870
+      - 8088:8088
+    volumes:
+      - /opt/mount1
+      - /opt/mount2
+    networks:
+      - hadoop
+
+  datanode:
+    image: 'aliavm/datanode:1.1'
+    entrypoint: bash /root/run2.sh
+    command: /bin/bash
+    hostname: hadoop-datanode
+    ports:
+      - 9864:9864
+      - 8042:8042
+    volumes:
+      - /opt/mount1
+      - /opt/mount2
+    networks:
+      - hadoop
+    depends_on:
+      - namenode
